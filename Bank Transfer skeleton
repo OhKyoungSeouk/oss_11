@@ -6,10 +6,8 @@
 
 int main()
 {
-    int account_no;
-    int balance;
-    int account_amount;
-    int amount;
+    int password,balance,amount;
+	char ID[20];
 
     printf("\nEnter account number:");
     scanf("%d",&account_no);
