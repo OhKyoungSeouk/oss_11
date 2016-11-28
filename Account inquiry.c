@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<string>
+#include<string.h>
 #define N 10
 
 typedef struct {
@@ -20,16 +20,17 @@ int acc(void)
 
 	printf("개좌 개설\n");
 	printf("ID: ");
-	scanf_s("%d\n", &ID);
+	scanf("%d\n", &ID);
 	printf("사용자 이름: ");
-	scanf_s("%s\n", &name);
+	scanf("%s\n", name);
 	printf("금액: ");
-	scanf_s("%d\n", &balance);
+	scanf("%d\n", &balance);
 
 	node[number].ID = ID;
 	strcpy(node[number].name, name);
 	node[number].balance = balance;
 	number++;
+	return 0;
 }
 
 int inquiry(void)
@@ -39,7 +40,7 @@ int inquiry(void)
 
 	printf("개좌 조회\n");
 	printf("ID: ");
-	scanf_s("%d\n", &ID);
+	scanf("%d\n", &ID);
 
 	for (i = 0; i<number; i++)
 	{
@@ -48,8 +49,20 @@ int inquiry(void)
 			printf("ID: %d\n", node[i].ID);
 			printf("사용자 이름: %s\n", node[i].name);
 			printf("잔액: %d\n", node[i].balance);
-			return;
+			return 0;
 		}
 	}
 	printf("해당 ID는 없습니다.");
+	return 0;
 }
+int main(void)
+{
+	int status1,status2;
+
+	status1 = acc();
+	status2 = inquiry();
+
+	printf("%d %d ", status1,status2);
+return 0;
+
+
