@@ -1,23 +1,11 @@
-#ifndef STDIO_H
-#define STDIO_H
-#include <stdio.h>
-#endif
-
-#ifndef STRING_H
-#define STRING_H
-#include <string.h>
+#ifndef FRAMEWORK_H
+#define FRAMEWORK_H
+#include "framework.h"
 #endif
 
 #define NAMESIZE 20
 
-
-struct Customer{
-	char name[20];
-	int password;
-	int balance;
-};
-
-void makeAccount(struct Customer *array, int index){
+void makeAccount(struct Account *array, int index){
 	//배열과 빈 요소의 인덱스를 입력하시오
 
 	char buffer[20];

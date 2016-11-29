@@ -1,11 +1,19 @@
+//입출금
+#ifndef FRAMEWORK_H
+#define FRAMEWORK_H
+#include "framework.h"
+#endif
+
+/* -obsolete-
 struct account
 {
 	int id;
 	char name[20];
 	int money;
 };
+*/
 
-void depositMoney(account *tmp)
+void depositMoney(struct Account *tmp)
 {
 	int id;
 	int money;
@@ -25,7 +33,7 @@ void depositMoney(account *tmp)
 			for (int i = 0; i<100; i++)
 			{
 				if (id == tmp[i].id)
-					tmp[i].money += money;
+					tmp[i].balance += money;
 			}
 			break;
 		}
@@ -36,7 +44,7 @@ void depositMoney(account *tmp)
 
 }
 
-void withdraw(account *tmp)
+void withdraw(struct Account *tmp)
 {
 
 	int id;
@@ -57,7 +65,7 @@ void withdraw(account *tmp)
 			for (int i = 0; i<100; i++)
 			{
 				if (id == tmp[i].id)
-					tmp[i].money -= money;
+					tmp[i].balance -= money;
 			}
 			break;
 		}
