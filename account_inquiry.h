@@ -1,6 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#ifndef FRAMEWORK_H
+#define FRAMEWORK_H
+#include "framework.h"
+#endif
+
 #define N 10
 
 typedef struct {

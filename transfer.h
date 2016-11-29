@@ -1,12 +1,14 @@
 /*****************************************
                  TRANSFER
 *****************************************/
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef FRAMEWORK_H
+#define FRAMEWORK_H
+#include "framework.H"
+#endif
 
-int main()
+int transfer(struct Account *accPtr)
 {
-    int password,balance,amount;
+    int password = accPtr->password,balance = accPtr->balance,amount;
 	char ID[20];
 
     printf("\nEnter account number:");
