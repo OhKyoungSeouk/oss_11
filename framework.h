@@ -19,15 +19,15 @@
 // Account Structure
 struct Account{
 	char name[20];
-	int id;
-	int password;
-	int balance;
+	char id[20];
+	long int account_number;
+	long int password;
+	long int balance;
 };
 
 // linked list
 struct node{
 	struct Account *account;
-	int account_number;
 	struct node *next;
 };
 

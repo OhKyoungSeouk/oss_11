@@ -39,20 +39,20 @@ int inquiry(struct node *head) // requires node in main.c
 {
 	struct node *np = NULL;
 
-	int ID;
+	long int ID;
 	//int i;
 
 	printf("개좌 조회\n");
-	printf("ID: ");
-	scanf(" %d", &ID);
+	printf("ID: ");fflush( stdout );
+	scanf(" %ld", &ID);
 
 	for (np = head; np != NULL; np = np->next)
 	{
-		if (np->account->id == ID)
+		if (np->account->account_number == ID)
 		{
-			printf("ID: %d\n", np->account->id);
+			printf("ID: %ld\n", np->account->account_number);
 			printf("사용자 이름: %s\n", np->account->name);
-			printf("잔액: %d\n", np->account->balance);
+			printf("잔액: %ld\n", np->account->balance);
 			return 0;
 		}
 	}

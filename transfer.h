@@ -9,16 +9,16 @@
 void transfer(struct Account *ap, struct node *head)
 {
 	struct node *np;
-	int account_no, amount;
+	long int account_no, amount;
 
-    printf("\nEnter account number:");
-    scanf(" %d",&account_no);
+    printf("\nEnter account number:");fflush(stdout);
+    scanf(" %ld",&account_no);
 
-    printf("\nHow much money would you like to transfer? :");
-    scanf(" %d", &amount);
+    printf("\nHow much money would you like to transfer? :");fflush(stdout);
+    scanf(" %ld", &amount);
 
     for(np = head; np != NULL; np = np->next){
-    	if(np->account_number == account_no)
+    	if(np->account->account_number == account_no)
     		break;
     }
 
@@ -28,10 +28,10 @@ void transfer(struct Account *ap, struct node *head)
     }else if(np == NULL){
     	printf("Account does not exist...\n");
     }else{
-        printf("%d amount has been remitted\n",amount);
+        printf("%ld amount has been remitted\n",amount);
         ap->balance-=amount;
         np->account->balance += amount;
-        printf("%d amount left in account\n", ap->balance);
+        printf("%ld amount left in account\n", ap->balance);
     }
     //return 0;
 }

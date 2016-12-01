@@ -16,19 +16,19 @@ struct account
 void depositMoney(struct Account *tmp)
 {
 	//int id;
-	int money;
+	long int money;
 	char q;
 
 	printf("계좌에 금액을 더합니다.\n");
 	//printf("계좌번호를 입력하시오\n");
 	//scanf(" %d", &id);
 	printf("입금할 금액을 입력하시오\n");
-	scanf(" %d", &money);
+	scanf(" %ld", &money);
 	fflush(stdin);
 
 	while(money > 0)
 	{
-		printf("입력한 계좌번호와 금액이 각각 %d, %d가 맞습니까?(y/n)\n", tmp->id, money);
+		printf("입력한 계좌번호와 금액이 각각 %05ld, %ld가 맞습니까?(y/n)\n", tmp->account_number, money);
 		scanf(" %c", &q);
 		if (q == 'y') {
 			tmp->balance += money;
@@ -47,18 +47,18 @@ void depositMoney(struct Account *tmp)
 void withdraw(struct Account *tmp)
 {
 	//int id;
-	int money;
+	long int money;
 	char q;
 
 	printf("계좌에서 출금을 합니다.\n");
 	//printf("계좌번호를 입력하시오\n");
 	//scanf(" %d", &id);
 	printf("출금할 금액을 입력하시오\n");
-	scanf(" %d", &money);
+	scanf(" %ld", &money);
 	fflush(stdin);
 
 	while(money > 0) {
-		printf("입력한 계좌번호와 금액이 각각 %d, %d가 맞습니까?(Y/N)\n", tmp->id, money);
+		printf("입력한 계좌번호와 금액이 각각 %05ld, %ld가 맞습니까?(Y/N)\n", tmp->account_number, money);
 		scanf(" %c", &q);
 		if (q == 'y') {
 			tmp->balance -= money;

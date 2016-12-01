@@ -7,13 +7,13 @@
 struct node *head = NULL;
 int account_no = 0;
 
-void insertNode(char *name, int id, int pw, int balance){
+void insertNode(char *name, char *id, int pw, int balance){
 	struct node *link = (struct node*) malloc(sizeof(struct node));
 	link->account = (struct Account*) malloc(sizeof(struct Account));
 	//link->account->name = (char*) malloc(sizeof(char) * 21); // char * 20 + null character
 
 	strncpy(link->account->name, name, 20); // strncpy instead of strcpy to limit copy to 20 characters
-	link->account->id = id;
+	strncpy(link->account->id, id, 20);
 	link->account->password = pw;
 	link->account->balance = balance;
 
@@ -23,7 +23,7 @@ void insertNode(char *name, int id, int pw, int balance){
 void printNodes(void){
 	struct node *ptr = head;
 	while(ptr){
-		printf("%s %d %d\n", ptr->account->name, ptr->account->id, ptr->account->balance);
+		printf("%s %s %ld %ld\n", ptr->account->name, ptr->account->id, ptr->account->password, ptr->account->balance);
 		ptr = ptr->next;
 	}
 }
@@ -35,7 +35,7 @@ int saveData(void){
 	fp = fopen("accounts.txt", "w");
 	if(fp!=NULL){
 		for(np = head; np != NULL; np = np->next){
-			fprintf(fp, "%s,%d,%d,%d\n", np->account->name, np->account->id, np->account->password, np->account->balance);
+			fprintf(fp, "%s,%s,%ld,%ld\n", np->account->name, np->account->id, np->account->password, np->account->balance);
 		}
 		fclose(fp);
 	}else{
@@ -52,40 +52,45 @@ int loadData(void){
 	fp = fopen("accounts.txt", "r");
 	if(fp!=NULL){
 		for(np = head; np != NULL; np = np->next){
-			np->account_number = account_no;
+			np->account->account_number = account_no;
 			account_no++;
 			if(fgets(str, 160, fp) != NULL){
 				token = strtok(str, ",");
 				while(token!=NULL){
 					strncpy(np->account->name, token, 20);
 					token = strtok(NULL, ",");
-					sscanf(token, "%d", &np->account->id);
+					strncpy(np->account->id, token, 20);
 					token = strtok(NULL, ",");
-					sscanf(token, "%d", &np->account->password);
+					sscanf(token, "%ld", &np->account->password);
 					token = strtok(NULL, ",");
-					sscanf(token, "%d", &np->account->balance);
+					sscanf(token, "%ld", &np->account->balance);
 					token = strtok(NULL, ",");
 				}
 			}else{
+				fclose(fp);
 				return 1;
 			}
 		}
 	}
+	fclose(fp);
 	return 0;
 }
 
 // user level
 struct node* login(void){
-	int id, pw;
+	long int pw;
+	char id[20];
 	struct node *np = NULL;
-	puts("ID를 입력하시오: ");
+	puts("ID를 입력하시오: ");fflush(stdout);
 	// gets(logid); -id is not login id, nvm-
-	scanf(" %d", &id);
-	puts("비밀번호를 입력하시오: ");
-	scanf(" %d", &pw);
+	scanf(" %s", id);
+	puts("비밀번호를 입력하시오: ");fflush(stdout);
+	scanf(" %ld", &pw);
 
 	for(np = head; np != NULL; np = np->next){
-		if(np->account->id == id && np->account->password == pw){
+		if(strcmp(np->account->id,id) == 0 && np->account->password == pw){
+			//puts("Testing...");
+			//printf("from list: %s\nfrom input%s\n",np->account->id, id);
 			return np;
 		}
 	}
@@ -94,9 +99,9 @@ struct node* login(void){
 void menu(struct Account *ap){
 
 	int choice;
-
+	printf("Test: %s %s %ld %ld %ld\n", ap->name, ap->id, ap->password, ap->account_number, ap->balance);
 	puts("작업 번호를 입력하시오: ");
-	printf("[1]deposit\n[2]withdraw\n[3]transfer\n[4]inquiry\n[5]exit\n");
+	printf("[1]deposit\n[2]withdraw\n[3]transfer\n[4]inquiry\n[5]exit\n");fflush(stdout);
 	scanf(" %d", &choice);
 	switch(choice){
 	case 1:
@@ -119,7 +124,16 @@ void menu(struct Account *ap){
 void newAccount(void){
 	struct Account tmp;
 	tmp = makeAccount();
+	tmp.account_number = account_no;
+	account_no++;
+
 	insertNode(tmp.name, tmp.id, tmp.password, tmp.balance);
+
+	puts("Your new account has been created!");
+	printf("%s\n%s\n%05ld\n", tmp.name, tmp.id, tmp.account_number);
+
+	//puts("Testing...");
+	//printNodes();
 }
 int main(void){
 	//setbuf(stdout, NULL); // eclipse printf-scanf problem: disables buffer
@@ -131,6 +145,8 @@ int main(void){
 		puts("Data load failed...");
 		return 1;
 	}
+	printf("Testing: \n");
+	printNodes();fflush( stdout );
 	while(1){
 		printf("[1]Login\n[2]Register\n");fflush( stdout );
 		scanf(" %d", &choice);
@@ -139,11 +155,14 @@ int main(void){
 			if(np != NULL){
 				menu(np->account);
 				saveData();
+				system("cls");
 			}else{
 				puts("Invalid username or password");fflush( stdout );
+				printNodes();
 			}
 		}else if(choice == 2){
 			newAccount();
+			saveData();
 		}else{
 			puts("완료되었습니다...");fflush( stdout );
 			break;

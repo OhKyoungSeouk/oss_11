@@ -6,15 +6,18 @@
 struct Account makeAccount(){
 	//배열과 빈 요소의 인덱스를 입력하시오
 	struct Account ap;
-	char buffer[20];
-	int input;
+	char name[20], id[20];
+	long int input;
 
 	puts("이름을 입력하시오: ");fflush( stdout );
-	gets(buffer);
+	scanf(" %s", name);
+	puts("login ID를 입력하시오: ");fflush( stdout);
+	scanf(" %s", id);
 	puts("비밀번호를 입력하시오: ");fflush( stdout );
-	scanf(" %d", &input);
+	scanf(" %ld", &input);
 
-	strncpy(ap.name, buffer, 20);
+	strncpy(ap.name, name, 20);
+	strncpy(ap.id, id, 20);
 	ap.password = input;
 	ap.balance = 0;
 
