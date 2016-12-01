@@ -4,7 +4,7 @@
 #endif
 
 #define N 10
-
+/* obsolete structure
 typedef struct {
 	int ID;
 	char name[20];
@@ -14,7 +14,7 @@ typedef struct {
 acd node[N];
 int number = 0;
 
-int acc(void)
+int acc(void) // 이거 뭐예요??
 {
 	int ID;
 	char name[20];
@@ -34,37 +34,28 @@ int acc(void)
 	number++;
 	return 0;
 }
-
-int inquiry(void)
+*/
+int inquiry() // requires node in main.c
 {
+	struct node *np;
+
 	int ID;
 	int i;
 
 	printf("개좌 조회\n");
 	printf("ID: ");
-	scanf("%d\n", &ID);
+	scanf(" %d", &ID);
 
-	for (i = 0; i<number; i++)
+	for (np = head; np != NULL; np = np->next)
 	{
-		if (node[i].ID == ID)
+		if (np->account->id == ID)
 		{
-			printf("ID: %d\n", node[i].ID);
-			printf("사용자 이름: %s\n", node[i].name);
-			printf("잔액: %d\n", node[i].balance);
+			printf("ID: %d\n", np->account->id);
+			printf("사용자 이름: %s\n", np->account->name);
+			printf("잔액: %d\n", np->account->balance);
 			return 0;
 		}
 	}
 	printf("해당 ID는 없습니다.");
-	return 0;
+	return 1;
 }
-int main(void)
-{
-	int status1,status2;
-
-	status1 = acc();
-	status2 = inquiry();
-
-	printf("%d %d ", status1,status2);
-return 0;
-
-

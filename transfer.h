@@ -6,29 +6,22 @@
 #include "framework.H"
 #endif
 
-int transfer(struct Account *accPtr)
+void transfer(struct Account *accPtr)
 {
-    int password = accPtr->password,balance = accPtr->balance,amount;
-	char ID[20];
+	int account_no, amount;
 
     printf("\nEnter account number:");
     scanf("%d",&account_no);
 
     printf("\nHow much money would you like to transfer? :");
-while(1)
-    {
-        if(account_amount<amount)
-    {
+    scanf(" %d", &amount);
+    if(accPtr->balance < amount){
         printf("Transaction denied!Insufficient funds!!\n");
-    }
-    else
-    {
+        //return 1;
+    }else{
         printf("%d amount has been remitted\n",amount);
+        accPtr->balance-=amount;
+        printf("%d amount left in account\n",balance);
     }
-    balance=account_amount-amount;
-    printf("%d amount left in account\n",balance);
-    }
-
-
-    return 0;
+    //return 0;
 }
