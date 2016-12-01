@@ -22,8 +22,19 @@ struct Account{
 	int password;
 	int balance;
 };
+/* obsolete node and data management functions
+struct node{
+	struct Account *account;
+	long account_number;
+	struct node *next;
+};
 
+struct node *head = NULL;
 struct Account gData[DATASIZE];
+
+void insertNode(char *name, int id, int pw, int bal){
+
+}
 
 int loadData(void){
 	FILE *fp = NULL;
@@ -31,7 +42,7 @@ int loadData(void){
 	int i;
 	fp = fopen("accounts.txt", "r");
 	if(fp!=NULL){
-		for(i = 0; i < DATASIZE; i++){
+		for(; head != NULL; head=head->next){
 			if(fgets(str, 160, fp)!=NULL){
 				token = strtok(str, ",");
 				while(token!=NULL){
@@ -59,9 +70,11 @@ int saveData(void){
 		for(i = 0; i < DATASIZE; i++){
 			fprintf(fp, "%s%d%d%d\n", gData[i].name, gData[i].id, gData[i].password, gData[i].balance);
 		}
+		fclose(fp);
 	}else{
 		return 1;
 	}
+	fclose(fp);
 	return 0;
 }
-
+*/
