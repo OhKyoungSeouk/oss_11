@@ -50,7 +50,7 @@ int loadData(void){
 	char str[160], *token;
 	account_no = 0;
 	fp = fopen("accounts.txt", "r");
-	if(fp!=NULL){
+	if(fp != NULL){
 		for(np = head; np != NULL; np = np->next){
 			np->account->account_number = account_no;
 			account_no++;
@@ -66,11 +66,11 @@ int loadData(void){
 					sscanf(token, "%ld", &np->account->balance);
 					token = strtok(NULL, ",");
 				}
-			}else{
-				fclose(fp);
-				return 1;
 			}
 		}
+	}else{
+		fclose(fp);
+		return 1;
 	}
 	fclose(fp);
 	return 0;
@@ -129,8 +129,7 @@ void newAccount(void){
 
 	insertNode(tmp.name, tmp.id, tmp.password, tmp.balance);
 
-	puts("Your new account has been created!");
-	printf("%s\n%s\n%05ld\n", tmp.name, tmp.id, tmp.account_number);
+	printf("%s, Your new account has been created!\nid: %s\naccount no: %05ld\n", tmp.name, tmp.id, tmp.account_number);
 
 	//puts("Testing...");
 	//printNodes();
@@ -145,8 +144,8 @@ int main(void){
 		puts("Data load failed...");
 		return 1;
 	}
-	printf("Testing: \n");
-	printNodes();fflush( stdout );
+	//printf("Testing: \n");
+	//printNodes();fflush( stdout );
 	while(1){
 		printf("[1]Login\n[2]Register\n");fflush( stdout );
 		scanf(" %d", &choice);

@@ -65,7 +65,7 @@ void withdraw(struct Account *tmp)
 			break;
 		}
 		else
-			printf("잘못 입력하였습니다. 다시 입력하시오.(Y/N)\n");
+			printf("잘못 입력하였습니다. 다시 입력하시오.(y/n)\n");
 	}
 	printf("출금이 완료되었습니다.\n");
 }
