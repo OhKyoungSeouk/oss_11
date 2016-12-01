@@ -3,7 +3,7 @@
 #include "framework.h"
 #endif
 
-#define N 10
+//#define N 10
 /* obsolete structure
 typedef struct {
 	int ID;
@@ -35,12 +35,12 @@ int acc(void) // 이거 뭐예요??
 	return 0;
 }
 */
-int inquiry() // requires node in main.c
+int inquiry(struct node *head) // requires node in main.c
 {
-	struct node *np;
+	struct node *np = NULL;
 
 	int ID;
-	int i;
+	//int i;
 
 	printf("개좌 조회\n");
 	printf("ID: ");

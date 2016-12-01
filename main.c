@@ -4,20 +4,13 @@
 #include "manage_money.h"
 #include "transfer.h"
 
-// linked list
-struct node{
-	struct Account *account;
-	int account_number;
-	struct node *next;
-};
-
 struct node *head = NULL;
 int account_no = 0;
 
 void insertNode(char *name, int id, int pw, int balance){
 	struct node *link = (struct node*) malloc(sizeof(struct node));
 	link->account = (struct Account*) malloc(sizeof(struct Account));
-	link->account->name = (char*) malloc(sizeof(char) * 21); // char * 20 + null character
+	//link->account->name = (char*) malloc(sizeof(char) * 21); // char * 20 + null character
 
 	strncpy(link->account->name, name, 20); // strncpy instead of strcpy to limit copy to 20 characters
 	link->account->id = id;
@@ -60,7 +53,7 @@ int loadData(void){
 	if(fp!=NULL){
 		for(np = head; np != NULL; np = np->next){
 			np->account_number = account_no;
-			id++;
+			account_no++;
 			if(fgets(str, 160, fp) != NULL){
 				token = strtok(str, ",");
 				while(token!=NULL){
@@ -82,28 +75,29 @@ int loadData(void){
 }
 
 // user level
-struct node login(void){
+struct node* login(void){
 	int id, pw;
 	struct node *np = NULL;
 	puts("ID를 입력하시오: ");
 	// gets(logid); -id is not login id, nvm-
-	scanf(" %d", &id)
+	scanf(" %d", &id);
 	puts("비밀번호를 입력하시오: ");
 	scanf(" %d", &pw);
 
 	for(np = head; np != NULL; np = np->next){
-		if(np->account->id == logid && np->account->password == pw){
+		if(np->account->id == id && np->account->password == pw){
 			return np;
-		}else{
-			return NULL;
 		}
 	}
+	return np;
 }
 void menu(struct Account *ap){
 
 	int choice;
+
 	puts("작업 번호를 입력하시오: ");
-	printf("[1]deposit\n[2]withdraw\n[3]transfer\n[4]inquiry\n[5]make account\n[6]exit\n")
+	printf("[1]deposit\n[2]withdraw\n[3]transfer\n[4]inquiry\n[5]exit\n");
+	scanf(" %d", &choice);
 	switch(choice){
 	case 1:
 		depositMoney(ap);
@@ -112,32 +106,48 @@ void menu(struct Account *ap){
 		withdraw(ap);
 		break;
 	case 3:
-		transfer(ap);
+		transfer(ap, head);
 		break;
 	case 4:
-		inquiry();
-		break;
-	case 5:
-		makeAccount();
+		inquiry(head);
 		break;
 	default:
 		break;
 	}
-	puts("완료되었습니다.")
+	puts("완료되었습니다.");
+}
+void newAccount(void){
+	struct Account tmp;
+	tmp = makeAccount();
+	insertNode(tmp.name, tmp.id, tmp.password, tmp.balance);
 }
 int main(void){
+	//setbuf(stdout, NULL); // eclipse printf-scanf problem: disables buffer
+
 	struct node *np = NULL;
+	int choice;
 
 	if(loadData() == 1){
 		puts("Data load failed...");
 		return 1;
 	}
-	if((np = login())!=NULL){
-		menu(np->account);
-		saveData();
+	while(1){
+		printf("[1]Login\n[2]Register\n");fflush( stdout );
+		scanf(" %d", &choice);
+		if(choice == 1){
+			np = login();
+			if(np != NULL){
+				menu(np->account);
+				saveData();
+			}else{
+				puts("Invalid username or password");fflush( stdout );
+			}
+		}else if(choice == 2){
+			newAccount();
+		}else{
+			puts("완료되었습니다...");fflush( stdout );
+			break;
+		}
 	}
-	else
-		puts("Invalid username or password");
-
 	return 0;
 }
