@@ -13,7 +13,8 @@
 #include <string.h>
 #endif
 
-#define DATASIZE 999
+#ifndef FRAMEWORK_H
+#define FRAMEWORK_H
 
 // Account Structure
 struct Account{
@@ -22,7 +23,20 @@ struct Account{
 	int password;
 	int balance;
 };
-/* obsolete node and data management functions
+
+// linked list
+struct node{
+	struct Account *account;
+	int account_number;
+	struct node *next;
+};
+
+#endif
+
+//#define DATASIZE 999
+
+
+/* obsolete node and data management functions, transferred to main.c
 struct node{
 	struct Account *account;
 	long account_number;
