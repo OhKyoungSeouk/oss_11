@@ -1,0 +1,43 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+int saveData(void)
+{
+ 	FILE *fp = NULL;
+ 	char name[20];
+ 	char id[20];
+ 	strcpy(name,'jane');
+ 	strcpy(id,'book');
+
+ 	int password=0;
+ 	int balance=0;
+
+ 	fp = fopen("accounts.txt", "w");
+ 	if(fp!=NULL)
+ 	{
+
+ 			fprintf(fp, "%s,%s,%d,%d\n",name,id,password,balance);
+
+ 	}
+ 		fclose(fp);
+
+
+ 	fclose(fp);
+ 	return 0;
+ 	}
+int main(void)
+{
+	saveData();
+
+    return 0;
+
+
+}
+
+
+
+
+
+
+
+
