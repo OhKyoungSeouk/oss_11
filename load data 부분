@@ -1,0 +1,31 @@
+int loadData(void){
+ +	FILE *fp = NULL;
+ +	struct node *np = NULL;
+ +	char str[160], *token;
+ +	account_no = 0;
+ +	fp = fopen("accounts.txt", "r");
+ +	if(fp != NULL){
+ +		for(np = head; np != NULL; np = np->next){
+ +			np->account->account_number = account_no;
+ +			account_no++;
+ +			if(fgets(str, 160, fp) != NULL){
+ +				token = strtok(str, ",");
+ +				while(token!=NULL){
+ +					strncpy(np->account->name, token, 20);
+ +					token = strtok(NULL, ",");
+ +					strncpy(np->account->id, token, 20);
+ +					token = strtok(NULL, ",");
+ +					sscanf(token, "%ld", &np->account->password);
+ +					token = strtok(NULL, ",");
+ +					sscanf(token, "%ld", &np->account->balance);
+ +					token = strtok(NULL, ",");
+ +				}
+ +			}
+ +		}
+ +	}else{
+ +		fclose(fp);
+ +		return 1;
+ +	}
+ +	fclose(fp);
+ +	return 0;
+ +}
