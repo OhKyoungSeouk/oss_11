@@ -63,9 +63,12 @@ void withdraw(struct Account *tmp)
 		if (q == 'y') {
 			tmp->balance -= money;
 			break;
+		}else{
+			printf("잘못 입력하였습니다. 다시 입력하실까요?(y/n)\n");fflush(stdout);
+			scanf(" %c", &q);
+			if(q == 'n')
+				break;
 		}
-		else
-			printf("잘못 입력하였습니다. 다시 입력하시오.(y/n)\n");
 	}
 	printf("출금이 완료되었습니다.\n");
 }
