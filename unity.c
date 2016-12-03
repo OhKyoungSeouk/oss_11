@@ -309,7 +309,7 @@ int main(void){
 	//printf("Testing: \n");
 	//printNodes();fflush( stdout );
 	while(1){
-		printNodes();
+		//printNodes();
 		//system("cls");
 		printf("[1]Login\n[2]Register\n");fflush( stdout );
 		scanf(" %d", &choice);
