@@ -1,21 +1,6 @@
-
-#ifndef STDIO_H
-#define STDIO_H
 #include <stdio.h>
-#endif
-
-#ifndef STDLIB_H
-#define STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifndef STRING_H
-#define STRING_H
 #include <string.h>
-#endif
-
-#ifndef FRAMEWORK_H
-#define FRAMEWORK_H
 
 // Account Structure
 struct Account{
@@ -32,13 +17,54 @@ struct node{
 	struct node *next;
 };
 
-#endif
-
 struct node *head = NULL;
 int account_no = 0;
 
-//입출금
+struct Account makeAccount(){
+	//배열과 빈 요소의 인덱스를 입력하시오
+	struct Account ap;
+	char name[20], id[20];
+	long int input;
 
+	puts("이름을 입력하시오: ");fflush( stdout );
+	scanf(" %s", name);
+	puts("login ID를 입력하시오: ");fflush( stdout);
+	scanf(" %s", id);
+	puts("비밀번호를 입력하시오: ");fflush( stdout );
+	scanf(" %ld", &input);
+
+	strncpy(ap.name, name, 20);
+	strncpy(ap.id, id, 20);
+	ap.password = input;
+	ap.balance = 0;
+
+	return ap;
+}
+
+int inquiry(struct node *head) // requires node in main.c
+{
+	struct node *np = NULL;
+
+	long int ID;
+	//int i;
+
+	printf("개좌 조회\n");
+	printf("ID: ");fflush( stdout );
+	scanf(" %ld", &ID);
+
+	for (np = head; np != NULL; np = np->next)
+	{
+		if (np->account->account_number == ID)
+		{
+			printf("ID: %ld\n", np->account->account_number);
+			printf("사용자 이름: %s\n", np->account->name);
+			printf("잔액: %ld\n", np->account->balance);
+			return 0;
+		}
+	}
+	printf("해당 ID는 없습니다.");
+	return 1;
+}
 
 void depositMoney(struct Account *tmp)
 {
@@ -99,9 +125,6 @@ void withdraw(struct Account *tmp)
 	}
 	printf("출금이 완료되었습니다.\n");
 }
-/*****************************************
-                 TRANSFER
-*****************************************/
 
 void transfer(struct Account *ap, struct node *head)
 {
@@ -132,59 +155,15 @@ void transfer(struct Account *ap, struct node *head)
     }
     //return 0;
 }
-struct Account makeAccount(){
-	//배열과 빈 요소의 인덱스를 입력하시오
-	struct Account ap;
-	char name[20], id[20];
-	long int input;
 
-	puts("이름을 입력하시오: ");fflush( stdout );
-	scanf(" %s", name);
-	puts("login ID를 입력하시오: ");fflush( stdout);
-	scanf(" %s", id);
-	puts("비밀번호를 입력하시오: ");fflush( stdout );
-	scanf(" %ld", &input);
-
-	strncpy(ap.name, name, 20);
-	strncpy(ap.id, id, 20);
-	ap.password = input;
-	ap.balance = 0;
-
-	return ap;
-}
-
-int inquiry(struct node *head) // requires node in main.c
-{
-	struct node *np = NULL;
-
-	long int ID;
-	//int i;
-
-	printf("개좌 조회\n");
-	printf("ID: ");fflush( stdout );
-	scanf(" %ld", &ID);
-
-	for (np = head; np != NULL; np = np->next)
-	{
-		if (np->account->account_number == ID)
-		{
-			printf("ID: %ld\n", np->account->account_number);
-			printf("사용자 이름: %s\n", np->account->name);
-			printf("잔액: %ld\n", np->account->balance);
-			return 0;
-		}
-	}
-	printf("해당 ID는 없습니다.");
-	return 1;
-}
-
-void insertNode(char *name, char *id, int pw, int balance){
+void insertNode(char *name, char *id, long int account_number,long int pw, long int balance){
 	struct node *link = (struct node*) malloc(sizeof(struct node));
 	link->account = (struct Account*) malloc(sizeof(struct Account));
 	//link->account->name = (char*) malloc(sizeof(char) * 21); // char * 20 + null character
 
 	strncpy(link->account->name, name, 20); // strncpy instead of strcpy to limit copy to 20 characters
 	strncpy(link->account->id, id, 20);
+	link->account->account_number = account_number;
 	link->account->password = pw;
 	link->account->balance = balance;
 
@@ -194,12 +173,10 @@ void insertNode(char *name, char *id, int pw, int balance){
 void printNodes(void){
 	struct node *ptr = head;
 	while(ptr){
-		printf("%s %s %ld %ld\n", ptr->account->name, ptr->account->id, ptr->account->password, ptr->account->balance);
+		printf("%s %s %ld %ld %ld\n", ptr->account->name, ptr->account->id, ptr->account->account_number, ptr->account->password, ptr->account->balance);
 		ptr = ptr->next;
 	}
 }
-
-// data management
 int saveData(void){
 	FILE *fp = NULL;
 	struct node *np = NULL;
@@ -217,26 +194,29 @@ int saveData(void){
 }
 int loadData(void){
 	FILE *fp = NULL;
-	struct node *np = NULL;
+	// struct node *np = NULL;
+	char name[20], id[20];
+	long int password, balance;
 	char str[160], *token;
+
 	account_no = 0;
 	fp = fopen("accounts.txt", "r");
 	if(fp != NULL){
-		for(np = head; np != NULL; np = np->next){
-			np->account->account_number = account_no;
-			account_no++;
-			if(fgets(str, 160, fp) != NULL){
-				token = strtok(str, ",");
-				while(token!=NULL){
-					strncpy(np->account->name, token, 20);
-					token = strtok(NULL, ",");
-					strncpy(np->account->id, token, 20);
-					token = strtok(NULL, ",");
-					sscanf(token, "%ld", &np->account->password);
-					token = strtok(NULL, ",");
-					sscanf(token, "%ld", &np->account->balance);
-					token = strtok(NULL, ",");
-				}
+		while(fgets(str, 160, fp) != NULL){
+			//np->account->account_number = account_no;
+			//account_no++;
+			token = strtok(str, ",");
+			while(token!=NULL){
+				strncpy(name, token, 20);
+				token = strtok(NULL, ",");
+				strncpy(id, token, 20);
+				token = strtok(NULL, ",");
+				sscanf(token, "%ld", &password);
+				token = strtok(NULL, ",");
+				sscanf(token, "%ld", &balance);
+				token = strtok(NULL, ",");
+				insertNode(name, id, account_no, password, balance);
+				account_no++;
 			}
 		}
 	}else{
@@ -246,8 +226,6 @@ int loadData(void){
 	fclose(fp);
 	return 0;
 }
-
-// user level
 struct node* login(void){
 	long int pw;
 	char id[20];
@@ -295,16 +273,29 @@ void menu(struct Account *ap){
 void newAccount(void){
 	struct Account tmp;
 	tmp = makeAccount();
-	tmp.account_number = account_no;
 	account_no++;
 
-	insertNode(tmp.name, tmp.id, tmp.password, tmp.balance);
+	insertNode(tmp.name, tmp.id, account_no, tmp.password, tmp.balance);
 
 	printf("%s, Your new account has been created!\nid: %s\naccount no: %05ld\n", tmp.name, tmp.id, tmp.account_number);
 
 	//puts("Testing...");
 	//printNodes();
 }
+
+/*
+int main(void){
+	//struct node *np = NULL;
+	loadData();
+	printNodes();
+
+	//printf("%s %s %ld %ld\n", np->account->name, np->account->id, np->account->password, np->account->balance);
+
+
+	return 0;
+}
+*/
+
 int main(void){
 	//setbuf(stdout, NULL); // eclipse printf-scanf problem: disables buffer
 
@@ -318,6 +309,8 @@ int main(void){
 	//printf("Testing: \n");
 	//printNodes();fflush( stdout );
 	while(1){
+		printNodes();
+		//system("cls");
 		printf("[1]Login\n[2]Register\n");fflush( stdout );
 		scanf(" %d", &choice);
 		if(choice == 1){
@@ -325,7 +318,7 @@ int main(void){
 			if(np != NULL){
 				menu(np->account);
 				saveData();
-				system("cls");
+				//system("cls");
 			}else{
 				puts("Invalid username or password");fflush( stdout );
 				printNodes();
@@ -340,3 +333,5 @@ int main(void){
 	}
 	return 0;
 }
+
+
