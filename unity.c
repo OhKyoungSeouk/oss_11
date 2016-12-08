@@ -248,7 +248,7 @@ struct node* login(void){
 void menu(struct Account *ap){
 
 	int choice;
-	printf("Test: %s %s %ld %ld %ld\n", ap->name, ap->id, ap->password, ap->account_number, ap->balance);
+	//printf("Test: %s %s %ld %ld %ld\n", ap->name, ap->id, ap->password, ap->account_number, ap->balance);
 	puts("작업 번호를 입력하시오: ");
 	printf("[1]deposit\n[2]withdraw\n[3]transfer\n[4]inquiry\n[5]exit\n");fflush(stdout);
 	scanf(" %d", &choice);
